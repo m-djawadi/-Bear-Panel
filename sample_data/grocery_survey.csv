@@ -1,0 +1,151 @@
+age,gender,province,sustainability_attitude,q_pay_more_eco,q_switch_reason,preferred_brand
+40,Male,Ontario,Sustainability-conscious when affordable,Yes,Lower price,Sobeys
+50,Female,Ontario,Sustainability-conscious when affordable,Yes,Store closer to home,Metro
+59,Male,British Columbia,Sustainability-conscious when affordable,Yes,Store closer to home,Metro
+50,Female,Ontario,Sustainability-conscious when affordable,Yes,More eco-friendly options,No Name
+27,Male,British Columbia,Highly committed to sustainability,No,Better quality,Costco
+39,Female,British Columbia,Sustainability-conscious when affordable,No,More eco-friendly options,Walmart
+21,Female,Manitoba,Sustainability-conscious when affordable,Yes,Better quality,Walmart
+39,Male,Ontario,Sustainability-conscious when affordable,No,Loyalty points,Walmart
+27,Female,Quebec,Highly committed to sustainability,Yes,More eco-friendly options,Metro
+49,Female,British Columbia,Neutral on sustainability,No,Loyalty points,Costco
+38,Male,Quebec,Neutral on sustainability,Maybe,More eco-friendly options,Walmart
+27,Male,Ontario,Neutral on sustainability,No,More eco-friendly options,Costco
+38,Female,Nova Scotia,Sustainability-conscious when affordable,No,More eco-friendly options,Loblaws
+18,Female,Ontario,Neutral on sustainability,No,More eco-friendly options,Loblaws
+50,Female,Ontario,Sustainability-conscious when affordable,No,More eco-friendly options,Costco
+55,Male,Quebec,Sustainability-conscious when affordable,Yes,Better quality,No Name
+42,Male,Ontario,Sustainability-conscious when affordable,Yes,Store closer to home,Costco
+42,Male,Ontario,Highly committed to sustainability,Maybe,Store closer to home,Walmart
+42,Male,Alberta,Neutral on sustainability,Maybe,More eco-friendly options,Metro
+40,Female,Ontario,Neutral on sustainability,Yes,Lower price,No Name
+38,Male,Ontario,Sustainability-conscious when affordable,No,Loyalty points,Sobeys
+46,Female,Manitoba,Sustainability-conscious when affordable,Yes,Loyalty points,Costco
+32,Female,Quebec,Skeptical of green claims,No,Loyalty points,Loblaws
+35,Female,British Columbia,Neutral on sustainability,No,Better quality,Sobeys
+75,Male,Ontario,Sustainability-conscious when affordable,Yes,Store closer to home,Costco
+48,Male,Alberta,Neutral on sustainability,Yes,Loyalty points,No Name
+38,Male,Quebec,Neutral on sustainability,No,Better quality,No Name
+51,Male,British Columbia,Sustainability-conscious when affordable,No,Loyalty points,Walmart
+47,Female,Ontario,Neutral on sustainability,Maybe,More eco-friendly options,Walmart
+44,Non-binary,Nova Scotia,Sustainability-conscious when affordable,Yes,Better quality,Metro
+46,Male,Manitoba,Neutral on sustainability,No,Loyalty points,Walmart
+52,Female,British Columbia,Skeptical of green claims,Maybe,Better quality,Metro
+54,Male,Ontario,Skeptical of green claims,No,More eco-friendly options,Metro
+35,Male,Ontario,Highly committed to sustainability,Maybe,Lower price,No Name
+31,Male,British Columbia,Sustainability-conscious when affordable,No,Loyalty points,No Name
+36,Male,Ontario,Highly committed to sustainability,Maybe,Lower price,Sobeys
+43,Non-binary,Ontario,Neutral on sustainability,Yes,Better quality,Costco
+36,Female,Alberta,Sustainability-conscious when affordable,No,Better quality,Loblaws
+54,Female,Quebec,Skeptical of green claims,No,Store closer to home,No Name
+37,Male,Quebec,Highly committed to sustainability,No,Better quality,Sobeys
+67,Female,Quebec,Neutral on sustainability,No,Loyalty points,Walmart
+44,Female,Quebec,Neutral on sustainability,Yes,Store closer to home,Loblaws
+44,Male,Quebec,Sustainability-conscious when affordable,Maybe,Lower price,Metro
+54,Female,Nova Scotia,Sustainability-conscious when affordable,Yes,Loyalty points,Metro
+20,Female,Ontario,Sustainability-conscious when affordable,Maybe,Loyalty points,Sobeys
+42,Male,Ontario,Sustainability-conscious when affordable,No,More eco-friendly options,Metro
+36,Female,Ontario,Sustainability-conscious when affordable,Yes,Better quality,Walmart
+61,Male,Ontario,Sustainability-conscious when affordable,Yes,More eco-friendly options,No Name
+43,Male,Ontario,Neutral on sustainability,Yes,More eco-friendly options,Sobeys
+38,Female,Quebec,Sustainability-conscious when affordable,Yes,Loyalty points,Loblaws
+36,Male,Quebec,Sustainability-conscious when affordable,Yes,Lower price,Loblaws
+56,Non-binary,Alberta,Skeptical of green claims,Yes,Loyalty points,Costco
+65,Female,Ontario,Sustainability-conscious when affordable,Maybe,Loyalty points,Metro
+49,Female,Manitoba,Sustainability-conscious when affordable,No,Lower price,Costco
+62,Female,Ontario,Skeptical of green claims,No,Loyalty points,Loblaws
+51,Male,Ontario,Sustainability-conscious when affordable,Yes,Lower price,Costco
+57,Male,British Columbia,Highly committed to sustainability,No,Lower price,No Name
+43,Female,Ontario,Skeptical of green claims,No,Store closer to home,No Name
+40,Female,Ontario,Highly committed to sustainability,Yes,Lower price,Loblaws
+58,Male,Quebec,Highly committed to sustainability,No,More eco-friendly options,Loblaws
+33,Male,Quebec,Skeptical of green claims,Maybe,Loyalty points,Walmart
+28,Female,Ontario,Highly committed to sustainability,Maybe,Better quality,Metro
+80,Male,Ontario,Neutral on sustainability,Maybe,More eco-friendly options,No Name
+41,Female,British Columbia,Sustainability-conscious when affordable,No,Loyalty points,Sobeys
+44,Female,Ontario,Sustainability-conscious when affordable,Yes,Loyalty points,Sobeys
+54,Female,Ontario,Skeptical of green claims,Yes,Better quality,Loblaws
+41,Female,British Columbia,Sustainability-conscious when affordable,Maybe,Lower price,Costco
+48,Male,Ontario,Sustainability-conscious when affordable,No,Loyalty points,Costco
+40,Male,Alberta,Highly committed to sustainability,Maybe,Store closer to home,Metro
+40,Male,British Columbia,Sustainability-conscious when affordable,Yes,Store closer to home,Walmart
+58,Male,Quebec,Sustainability-conscious when affordable,No,Store closer to home,No Name
+63,Male,Alberta,Sustainability-conscious when affordable,Maybe,Lower price,Walmart
+20,Male,British Columbia,Sustainability-conscious when affordable,Yes,Better quality,Walmart
+30,Female,Ontario,Neutral on sustainability,No,Lower price,Walmart
+34,Female,Quebec,Highly committed to sustainability,Maybe,Store closer to home,Loblaws
+42,Male,Ontario,Neutral on sustainability,Yes,Lower price,Costco
+46,Female,British Columbia,Sustainability-conscious when affordable,Maybe,Lower price,Metro
+65,Male,Ontario,Highly committed to sustainability,No,Better quality,Loblaws
+34,Male,British Columbia,Neutral on sustainability,Yes,More eco-friendly options,Loblaws
+37,Female,Nova Scotia,Highly committed to sustainability,Yes,More eco-friendly options,Costco
+41,Female,Alberta,Skeptical of green claims,No,Loyalty points,Loblaws
+33,Male,Ontario,Sustainability-conscious when affordable,Maybe,More eco-friendly options,Costco
+22,Male,Ontario,Highly committed to sustainability,No,Loyalty points,Costco
+62,Female,Alberta,Sustainability-conscious when affordable,Maybe,Loyalty points,No Name
+18,Female,Ontario,Skeptical of green claims,No,More eco-friendly options,Costco
+44,Male,Quebec,Sustainability-conscious when affordable,Yes,Loyalty points,Loblaws
+38,Female,Manitoba,Highly committed to sustainability,Yes,Loyalty points,Costco
+54,Female,Quebec,Skeptical of green claims,No,Loyalty points,Metro
+44,Female,Ontario,Neutral on sustainability,No,Better quality,No Name
+18,Male,Quebec,Sustainability-conscious when affordable,Maybe,More eco-friendly options,Loblaws
+50,Male,Nova Scotia,Sustainability-conscious when affordable,No,Lower price,Walmart
+27,Female,British Columbia,Highly committed to sustainability,Maybe,More eco-friendly options,Loblaws
+57,Female,Quebec,Sustainability-conscious when affordable,Yes,Loyalty points,Metro
+35,Male,Ontario,Sustainability-conscious when affordable,No,Better quality,Walmart
+48,Male,Quebec,Sustainability-conscious when affordable,Maybe,More eco-friendly options,Metro
+51,Female,Ontario,Highly committed to sustainability,Yes,Lower price,Costco
+44,Male,Manitoba,Neutral on sustainability,No,More eco-friendly options,Walmart
+54,Male,Ontario,Sustainability-conscious when affordable,Yes,Loyalty points,Sobeys
+50,Female,British Columbia,Neutral on sustainability,Yes,Loyalty points,No Name
+42,Female,British Columbia,Sustainability-conscious when affordable,Yes,Lower price,No Name
+64,Male,Quebec,Sustainability-conscious when affordable,Yes,More eco-friendly options,Sobeys
+48,Male,Nova Scotia,Sustainability-conscious when affordable,Yes,Better quality,No Name
+24,Male,British Columbia,Neutral on sustainability,Maybe,More eco-friendly options,Loblaws
+41,Male,Ontario,Neutral on sustainability,Yes,Lower price,Walmart
+36,Male,Quebec,Sustainability-conscious when affordable,Maybe,Lower price,Loblaws
+18,Female,Nova Scotia,Highly committed to sustainability,Yes,Store closer to home,Loblaws
+54,Female,Nova Scotia,Neutral on sustainability,Maybe,More eco-friendly options,Sobeys
+44,Female,Ontario,Skeptical of green claims,No,Loyalty points,Loblaws
+59,Male,Quebec,Sustainability-conscious when affordable,No,Loyalty points,No Name
+46,Female,British Columbia,Neutral on sustainability,Yes,More eco-friendly options,No Name
+54,Male,Ontario,Sustainability-conscious when affordable,Yes,Better quality,No Name
+44,Female,Ontario,Skeptical of green claims,Yes,Store closer to home,Metro
+22,Female,Manitoba,Highly committed to sustainability,No,More eco-friendly options,Loblaws
+26,Female,Nova Scotia,Highly committed to sustainability,Yes,Lower price,No Name
+22,Male,British Columbia,Skeptical of green claims,Maybe,Loyalty points,No Name
+61,Female,Manitoba,Neutral on sustainability,Yes,More eco-friendly options,Costco
+57,Female,Ontario,Highly committed to sustainability,No,Lower price,Sobeys
+42,Male,Ontario,Sustainability-conscious when affordable,Maybe,More eco-friendly options,Loblaws
+58,Female,Manitoba,Highly committed to sustainability,Yes,More eco-friendly options,Loblaws
+48,Male,Ontario,Neutral on sustainability,No,More eco-friendly options,Loblaws
+21,Female,Ontario,Highly committed to sustainability,No,Loyalty points,Costco
+49,Female,Nova Scotia,Highly committed to sustainability,No,Loyalty points,Costco
+37,Male,Alberta,Skeptical of green claims,Yes,Better quality,Loblaws
+63,Female,Nova Scotia,Skeptical of green claims,No,Loyalty points,Metro
+46,Female,Ontario,Skeptical of green claims,Yes,Better quality,Sobeys
+37,Female,Alberta,Sustainability-conscious when affordable,Maybe,Store closer to home,Loblaws
+31,Female,Quebec,Neutral on sustainability,No,Store closer to home,Costco
+43,Female,Quebec,Highly committed to sustainability,Yes,Store closer to home,Loblaws
+47,Non-binary,Nova Scotia,Highly committed to sustainability,Yes,More eco-friendly options,Sobeys
+57,Male,Ontario,Sustainability-conscious when affordable,Maybe,Lower price,Costco
+39,Female,British Columbia,Highly committed to sustainability,Yes,Better quality,No Name
+60,Female,Manitoba,Sustainability-conscious when affordable,Yes,More eco-friendly options,Costco
+59,Female,Alberta,Neutral on sustainability,Maybe,Lower price,Loblaws
+43,Female,Alberta,Neutral on sustainability,Maybe,Lower price,Costco
+44,Male,Alberta,Highly committed to sustainability,Yes,Store closer to home,No Name
+48,Female,Ontario,Neutral on sustainability,Maybe,Lower price,Walmart
+29,Female,Ontario,Highly committed to sustainability,Yes,Loyalty points,Loblaws
+33,Male,British Columbia,Highly committed to sustainability,Yes,Loyalty points,Metro
+40,Female,Ontario,Neutral on sustainability,No,Lower price,Metro
+36,Female,Quebec,Sustainability-conscious when affordable,No,Lower price,Walmart
+54,Female,Ontario,Sustainability-conscious when affordable,Maybe,Loyalty points,Walmart
+61,Male,Ontario,Sustainability-conscious when affordable,Maybe,Loyalty points,Walmart
+50,Female,Ontario,Skeptical of green claims,No,Lower price,Metro
+63,Male,Ontario,Neutral on sustainability,Yes,Lower price,Sobeys
+58,Female,Quebec,Skeptical of green claims,No,Better quality,No Name
+62,Female,Ontario,Highly committed to sustainability,Yes,More eco-friendly options,Metro
+44,Male,Ontario,Neutral on sustainability,Yes,More eco-friendly options,Costco
+20,Female,Manitoba,Sustainability-conscious when affordable,Maybe,Store closer to home,Walmart
+47,Male,Ontario,Sustainability-conscious when affordable,Maybe,More eco-friendly options,No Name
+37,Male,Ontario,Skeptical of green claims,Yes,Loyalty points,Loblaws

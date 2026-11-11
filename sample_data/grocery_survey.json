@@ -1,0 +1,542 @@
+[
+  {
+    "age": 40,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 50,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 59,
+    "gender": "Male",
+    "province": "British Columbia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 50,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 27,
+    "gender": "Male",
+    "province": "British Columbia",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 39,
+    "gender": "Female",
+    "province": "British Columbia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 21,
+    "gender": "Female",
+    "province": "Manitoba",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 39,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 27,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 49,
+    "gender": "Female",
+    "province": "British Columbia",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 38,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 27,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 38,
+    "gender": "Female",
+    "province": "Nova Scotia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 18,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 50,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 55,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 42,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 42,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 42,
+    "gender": "Male",
+    "province": "Alberta",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 40,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 38,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 46,
+    "gender": "Female",
+    "province": "Manitoba",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 32,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 35,
+    "gender": "Female",
+    "province": "British Columbia",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 75,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 48,
+    "gender": "Male",
+    "province": "Alberta",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 38,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 51,
+    "gender": "Male",
+    "province": "British Columbia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 47,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 44,
+    "gender": "Non-binary",
+    "province": "Nova Scotia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 46,
+    "gender": "Male",
+    "province": "Manitoba",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 52,
+    "gender": "Female",
+    "province": "British Columbia",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 54,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 35,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 31,
+    "gender": "Male",
+    "province": "British Columbia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 36,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 43,
+    "gender": "Non-binary",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 36,
+    "gender": "Female",
+    "province": "Alberta",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 54,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 37,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 67,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 44,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 44,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 54,
+    "gender": "Female",
+    "province": "Nova Scotia",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 20,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 42,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 36,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Better quality",
+    "preferred_brand": "Walmart"
+  },
+  {
+    "age": 61,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 43,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Neutral on sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Sobeys"
+  },
+  {
+    "age": 38,
+    "gender": "Female",
+    "province": "Quebec",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 36,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 56,
+    "gender": "Non-binary",
+    "province": "Alberta",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 65,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Maybe",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Metro"
+  },
+  {
+    "age": 49,
+    "gender": "Female",
+    "province": "Manitoba",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 62,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Loyalty points",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 51,
+    "gender": "Male",
+    "province": "Ontario",
+    "sustainability_attitude": "Sustainability-conscious when affordable",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Costco"
+  },
+  {
+    "age": 57,
+    "gender": "Male",
+    "province": "British Columbia",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 43,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Skeptical of green claims",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "Store closer to home",
+    "preferred_brand": "No Name"
+  },
+  {
+    "age": 40,
+    "gender": "Female",
+    "province": "Ontario",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "Yes",
+    "q_switch_reason": "Lower price",
+    "preferred_brand": "Loblaws"
+  },
+  {
+    "age": 58,
+    "gender": "Male",
+    "province": "Quebec",
+    "sustainability_attitude": "Highly committed to sustainability",
+    "q_pay_more_eco": "No",
+    "q_switch_reason": "More eco-friendly options",
+    "preferred_brand": "Loblaws"
+  }
+]

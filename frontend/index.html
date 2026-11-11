@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bear Panel — Synthetic Consumer Research Platform</title>
+<style>
+  :root{
+    --bg:#0d120c; --chrome:#121a10; --line:#26331d; --ink:#eaf2e2; --dim:#8fa079;
+    --screen:#e0b341; --qualified:#78c46a; --disq:#6d7c92; --answering:#5fb0d9;
+    --done:#a98bd9; --error:#e8746f; --accent:#78c46a;
+    --syn:#78c46a; --custom:#e0b341; --historical:#5fb0d9;
+    --wood:#8a6a3f; --wall:#1a2413; --floor:#141d10;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden;}
+  button{font-family:inherit;}
+
+  .top{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#141d10,#101710);}
+  .top h1{font-size:16px;margin:0;letter-spacing:.2px;}
+  .top .sub{font-size:11.5px;color:var(--dim);}
+  .perf{margin-left:auto;font:12px Consolas,monospace;color:#cbd8bd;background:#0e150a;
+    border:1px solid var(--line);border-radius:7px;padding:5px 9px;}
+  .conn{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--error);}
+  .conn.on .dot{background:var(--qualified);box-shadow:0 0 8px var(--qualified);}
+
+  /* view tabs */
+  .viewtabs{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--line);background:#0e150a;}
+  .vtab{padding:10px 15px;font-size:13px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;
+    margin-bottom:-1px;display:flex;align-items:center;gap:7px;}
+  .vtab:hover{color:var(--ink);}
+  .vtab.on{color:var(--ink);border-bottom-color:var(--accent);}
+  .vtab .badge{font:10px Consolas,monospace;background:#1a2413;border:1px solid var(--line);
+    border-radius:999px;padding:1px 6px;color:var(--dim);}
+
+  .view{display:none;height:calc(100vh - 92px);}
+  .view.on{display:flex;}
+
+  /* ---------- RUN VIEW ---------- */
+  #view-run{flex-direction:column;}
+  .assign{display:grid;grid-template-columns:1fr 240px 100px auto;gap:8px;padding:11px 18px;
+    border-bottom:1px solid var(--line);align-items:end;}
+  .assign label{font-size:10px;letter-spacing:.03em;color:var(--dim);text-transform:uppercase;
+    display:block;margin-bottom:4px;}
+  .assign textarea,.assign input{background:var(--chrome);border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:inherit;resize:none;width:100%;}
+  .assign textarea{height:44px;line-height:1.35;}
+  .assign textarea:focus,.assign input:focus{outline:none;border-color:var(--accent);}
+  .assign .run-btn{background:var(--accent);color:#0c1408;border:none;font-weight:700;
+    border-radius:8px;padding:0 20px;height:40px;font-size:14px;cursor:pointer;}
+  .assign .run-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  .mixbar{display:flex;align-items:center;gap:16px;padding:8px 18px;border-bottom:1px solid var(--line);
+    background:#0e150a;font-size:12px;color:var(--dim);flex-wrap:wrap;}
+  .mixbar .mixgroup{display:flex;align-items:center;gap:8px;}
+  .mixbar input[type=range]{width:90px;accent-color:var(--accent);}
+  .mixbar .mixval{font:11px Consolas,monospace;color:var(--ink);width:34px;}
+  .mixbar .cue{display:inline-flex;align-items:center;gap:5px;}
+  .mixbar .cue i{width:9px;height:9px;border-radius:50%;}
+  .mixbar .gt-flag{margin-left:auto;font-size:11.5px;padding:3px 9px;border-radius:999px;
+    border:1px solid var(--line);}
+  .mixbar .gt-flag.on{color:var(--historical);border-color:var(--historical);}
+
+  .phasebar{display:flex;align-items:center;padding:7px 18px;border-bottom:1px solid var(--line);
+    background:#0e150a;font-size:11.5px;overflow-x:auto;}
+  .phase{display:flex;align-items:center;gap:7px;color:var(--dim);white-space:nowrap;}
+  .phase .num{width:17px;height:17px;border-radius:50%;border:1px solid var(--line);
+    display:grid;place-items:center;font:600 10px Consolas,monospace;}
+  .phase.on{color:var(--ink);} .phase.on .num{background:var(--accent);border-color:var(--accent);color:#0c1408;}
+  .phase.done{color:var(--qualified);} .phase.done .num{border-color:var(--qualified);color:var(--qualified);}
+  .phase-sep{flex:1;height:1px;background:var(--line);margin:0 12px;min-width:14px;}
+
+  .stagerow{display:flex;flex:1;min-height:0;}
+  .stagewrap{flex:1;position:relative;overflow:hidden;}
+  #stage{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:pointer;}
+  .hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+    font-size:12px;color:var(--dim);background:rgba(13,18,12,.82);padding:6px 12px;border-radius:20px;
+    pointer-events:none;}
+  .legend{position:absolute;top:12px;left:14px;display:flex;flex-direction:column;gap:5px;
+    background:rgba(13,18,12,.72);border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+    font-size:11px;color:var(--dim);pointer-events:none;}
+  .legend div{display:flex;align-items:center;gap:7px;} .legend i{width:9px;height:9px;border-radius:50%;}
+
+  /* detail side panel (shared) */
+  .panel{width:400px;border-left:1px solid var(--line);background:var(--chrome);
+    display:flex;flex-direction:column;transition:margin-right .25s;}
+  .panel.hidden{margin-right:-400px;}
+  .panel-head{padding:15px 18px;border-bottom:1px solid var(--line);}
+  .panel-head .pname{font-size:18px;font-weight:700;}
+  .panel-head .prole{font-size:12.5px;color:var(--dim);margin-top:3px;line-height:1.45;}
+  .pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;
+    padding:3px 9px;border-radius:999px;margin-top:9px;margin-right:6px;border:1px solid var(--line);color:var(--dim);}
+  .pill.SCREENING{color:var(--screen);border-color:var(--screen);}
+  .pill.QUALIFIED{color:var(--qualified);border-color:var(--qualified);}
+  .pill.DISQUALIFIED{color:var(--disq);border-color:var(--disq);}
+  .pill.ANSWERING,.pill.ACTIVE{color:var(--answering);border-color:var(--answering);}
+  .pill.COMPLETED,.pill.DONE{color:var(--done);border-color:var(--done);}
+  .pill.WAITING{color:var(--screen);border-color:var(--screen);}
+  .pill.ERROR{color:var(--error);border-color:var(--error);}
+  .pill.src-synthetic,.pill.src-calibrated{color:var(--syn);border-color:var(--syn);}
+  .pill.src-custom{color:var(--custom);border-color:var(--custom);}
+  .pill.src-historical{color:var(--historical);border-color:var(--historical);}
+  .screening-note{margin-top:11px;border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5;
+    border:1px solid var(--line);background:#0e150a;}
+  .screening-note.ok{border-color:#2f5a2a;background:#111c0e;} .screening-note.no{border-color:#3a3f2a;}
+  .screening-note b{color:var(--ink);}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:12px;}
+  .metric{background:#0e150a;border:1px solid var(--line);border-radius:6px;padding:6px 8px;
+    color:var(--dim);font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;}
+  .metric strong{display:block;color:var(--ink);font:600 13px Consolas,monospace;margin-top:2px;}
+  .tabs{display:flex;gap:2px;padding:0 18px;border-bottom:1px solid var(--line);}
+  .tab{padding:9px 12px;font-size:12px;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+  .tab.on{color:var(--ink);border-bottom-color:var(--accent);} .tab.hidden{display:none;}
+  .panel-body{padding:15px 18px;overflow-y:auto;font-size:13.5px;line-height:1.6;word-break:break-word;flex:1;}
+  .panel-body:empty::after{content:"Pick a bear to read its persona and answers.";color:var(--dim);}
+  .panel-body h1,.panel-body h2,.panel-body h3,.panel-body h4{color:#f2f7ec;line-height:1.3;margin:1.1em 0 .45em;}
+  .panel-body h1{font-size:19px}.panel-body h2{font-size:16px}.panel-body h3{font-size:14.5px}
+  .panel-body p{margin:.55em 0}.panel-body ul,.panel-body ol{margin:.5em 0;padding-left:22px;}
+  .panel-body strong{color:#fff}.panel-body em{color:#cdd8bf;}
+  .panel-body code{font-family:Consolas,monospace;background:#0a1006;border:1px solid #26331d;border-radius:4px;padding:1px 4px;}
+  .panel-body pre{background:#0a1006;border:1px solid #26331d;border-radius:7px;padding:10px;overflow:auto;white-space:pre-wrap;}
+  .panel-body blockquote{border-left:3px solid var(--accent);margin:.7em 0;padding-left:12px;color:#c2cfb0;}
+  .persona-grid{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:13px;margin:2px 0 4px;}
+  .persona-grid dt{color:var(--dim);} .persona-grid dd{margin:0;color:var(--ink);}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px;}
+  .chip{font-size:11px;background:#0e150a;border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:#cdd8bf;}
+  .persona-desc{margin-top:12px;font-size:13px;line-height:1.6;color:#d3ddc6;font-style:italic;
+    border-left:3px solid var(--line);padding-left:11px;}
+  .close{float:right;cursor:pointer;color:var(--dim);font-size:20px;line-height:1;border:none;background:none;}
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>🐻 Bear Panel</h1>
+    <span class="sub">Synthetic Consumer Research Platform</span>
+    <span class="perf" id="performance">0 tokens • 0.0s</span>
+    <span class="conn" id="conn"><span class="dot"></span><span id="conntext">Offline</span></span>
+  </div>
+
+  <div class="viewtabs" id="viewtabs">
+    <div class="vtab on" data-view="run">🏫 Run panel</div>
+    <div class="vtab" data-view="studio">🎨 Character Studio</div>
+    <div class="vtab" data-view="library">📇 Persona Library <span class="badge" id="lib-badge">0</span></div>
+    <div class="vtab" data-view="ground">📊 Ground Truth <span class="badge" id="gt-badge">none</span></div>
+    <div class="vtab" data-view="dashboard">📈 Dashboard</div>
+  </div>
+
+  <!-- ============ RUN VIEW ============ -->
+  <div class="view on" id="view-run">
+    <div class="assign">
+      <div><label>Survey</label>
+        <textarea id="survey" placeholder="Paste your survey questions...">1. Would you pay 15% more for an eco-friendly grocery product? Why or why not?
+2. Which matters more to you: price or sustainability?
+3. What would make you switch grocery brands?</textarea></div>
+      <div><label>Target audience</label>
+        <input id="audience" value="Canadian grocery shoppers aged 25-65" /></div>
+      <div><label>Panel size</label>
+        <input id="panel_size" type="number" min="1" max="500" value="25" /></div>
+      <button class="run-btn" id="go">Run panel</button>
+    </div>
+
+    <div class="mixbar">
+      <span style="color:var(--ink);font-weight:600">Panel mix</span>
+      <div class="mixgroup"><span class="cue"><i style="background:var(--syn)"></i>Synthetic</span>
+        <input type="range" id="mix-synthetic" min="0" max="100" value="100"><span class="mixval" id="mixval-synthetic">100%</span></div>
+      <div class="mixgroup"><span class="cue"><i style="background:var(--custom)"></i>Custom</span>
+        <input type="range" id="mix-custom" min="0" max="100" value="0"><span class="mixval" id="mixval-custom">0%</span></div>
+      <div class="mixgroup"><span class="cue"><i style="background:var(--historical)"></i>Historical</span>
+        <input type="range" id="mix-historical" min="0" max="100" value="0"><span class="mixval" id="mixval-historical">0%</span></div>
+      <label class="cue" style="gap:6px"><input type="checkbox" id="calibrated" checked style="accent-color:var(--accent)">Calibrate to ground truth</label>
+      <span class="gt-flag" id="gt-flag">No ground truth</span>
+    </div>
+
+    <div class="phasebar" id="phasebar">
+      <div class="phase" data-phase="generating"><span class="num">1</span>Generating bears</div>
+      <span class="phase-sep"></span>
+      <div class="phase" data-phase="screening"><span class="num">2</span>Screening Room</div>
+      <span class="phase-sep"></span>
+      <div class="phase" data-phase="surveying"><span class="num">3</span>Survey Hall</div>
+      <span class="phase-sep"></span>
+      <div class="phase" data-phase="aggregating"><span class="num">4</span>Insights</div>
+    </div>
+
+    <div class="stagerow">
+      <div class="stagewrap">
+        <canvas id="stage"></canvas>
+        <div class="legend">
+          <div><i style="background:#e0b341"></i>Screening</div>
+          <div><i style="background:#78c46a"></i>Qualified</div>
+          <div><i style="background:#6d7c92"></i>Screened out</div>
+          <div><i style="background:#5fb0d9"></i>Answering</div>
+          <div><i style="background:#a98bd9"></i>Completed</div>
+        </div>
+        <div class="hint">Click any bear to read its persona · click the Insights Bear for the report</div>
+      </div>
+      <div class="panel hidden" id="panel">
+        <div class="panel-head">
+          <button class="close" id="close">&times;</button>
+          <div class="pname" id="pname">&mdash;</div>
+          <div class="prole" id="prole">&mdash;</div>
+          <span class="pill" id="ppill">&mdash;</span><span class="pill" id="psrc" style="display:none"></span>
+          <div class="screening-note" id="pscreen" style="display:none"></div>
+          <div class="metrics" id="pmetrics"></div>
+        </div>
+        <div class="tabs" id="ptabs">
+          <div class="tab on" data-tab="persona" id="tab-persona">Persona</div>
+          <div class="tab" data-tab="answer" id="tab-answer">Survey answer</div>
+        </div>
+        <div class="panel-body" id="pbody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHARACTER STUDIO ============ -->
+  <div class="view" id="view-studio">
+    <div style="flex:1;overflow-y:auto;padding:22px 26px;max-width:1100px;margin:0 auto;width:100%">
+      <h2 style="margin:0 0 4px">🎨 Character Studio</h2>
+      <p style="color:var(--dim);margin:0 0 20px;font-size:13.5px">Design a synthetic respondent by hand. Save it to your library, mark it a reusable template, or lock it so it joins every future study.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        <div class="fld"><label>Name</label><input id="cs-name" placeholder="e.g. Grandpa Joe"></div>
+        <div class="fld"><label>Age</label><input id="cs-age" type="number" min="16" max="95" value="35"></div>
+        <div class="fld"><label>Gender</label><input id="cs-gender" placeholder="Female / Male / Non-binary"></div>
+        <div class="fld"><label>Location</label><input id="cs-location" placeholder="Toronto, Ontario"></div>
+        <div class="fld"><label>Occupation</label><input id="cs-occupation" placeholder="Nurse"></div>
+        <div class="fld"><label>Education</label><input id="cs-education" placeholder="Bachelor's degree"></div>
+        <div class="fld"><label>Income</label><input id="cs-income" placeholder="$65,000"></div>
+        <div class="fld"><label>Family status</label><input id="cs-family_status" placeholder="Married with young children"></div>
+        <div class="fld"><label>Shopping frequency</label><input id="cs-shopping_frequency" placeholder="Weekly big shop"></div>
+        <div class="fld"><label>Risk tolerance</label><input id="cs-risk_tolerance" placeholder="Balanced"></div>
+        <div class="fld"><label>Sustainability attitude</label><input id="cs-sustainability" placeholder="Sustainability-conscious when affordable"></div>
+        <div class="fld"><label>Tech adoption</label><input id="cs-tech_adoption" placeholder="Fast follower"></div>
+        <div class="fld"><label>Interests (comma-separated)</label><input id="cs-interests" placeholder="hiking, cooking, gaming"></div>
+        <div class="fld"><label>Preferred brands (comma-separated)</label><input id="cs-preferred_brands" placeholder="Costco, Loblaws"></div>
+      </div>
+      <div class="fld" style="margin-top:14px"><label>Personality description</label>
+        <textarea id="cs-description" style="height:70px" placeholder="A couple of sentences describing who they are..."></textarea></div>
+      <div class="fld" style="margin-top:14px"><label>Tags (comma-separated)</label>
+        <input id="cs-tags" placeholder="seniors, east-coast, price-sensitive"></div>
+      <div style="display:flex;align-items:center;gap:18px;margin-top:16px;flex-wrap:wrap">
+        <label class="cue" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--dim)"><input type="checkbox" id="cs-template" style="accent-color:var(--accent)">Save as reusable template</label>
+        <label class="cue" style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--dim)"><input type="checkbox" id="cs-locked" style="accent-color:var(--accent)">🔒 Lock into every study</label>
+        <button class="run-btn" id="cs-save" style="height:38px">Save to library</button>
+        <button class="ghost-btn" id="cs-clear">Clear form</button>
+        <span id="cs-msg" style="font-size:12.5px;color:var(--qualified)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PERSONA LIBRARY ============ -->
+  <div class="view" id="view-library">
+    <div style="flex:1;overflow-y:auto;padding:22px 26px;max-width:1100px;margin:0 auto;width:100%">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+        <h2 style="margin:0">📇 Persona Library</h2>
+        <input id="lib-search" placeholder="Search personas..." style="flex:1;min-width:160px;background:var(--chrome);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;font-size:13px">
+        <input id="lib-tag" placeholder="Filter by tag" style="width:150px;background:var(--chrome);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;font-size:13px">
+      </div>
+      <div id="lib-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+      <p id="lib-empty" style="color:var(--dim);font-size:13.5px">No saved personas yet. Create one in the Character Studio.</p>
+    </div>
+  </div>
+
+  <!-- ============ GROUND TRUTH ============ -->
+  <div class="view" id="view-ground">
+    <div style="flex:1;overflow-y:auto;padding:22px 26px;max-width:1100px;margin:0 auto;width:100%">
+      <h2 style="margin:0 0 4px">📊 Ground Truth Calibration</h2>
+      <p style="color:var(--dim);margin:0 0 18px;font-size:13.5px">Upload a real survey dataset (CSV, XLSX, or JSON). The platform models its distributions, generates bears that statistically resemble your respondents, calibrates their answers, and validates every synthetic study against it.</p>
+      <div id="gt-drop" style="border:1.5px dashed var(--line);border-radius:12px;padding:30px;text-align:center;background:#0e150a;cursor:pointer">
+        <div style="font-size:30px">⬆️</div>
+        <div style="margin-top:8px;font-size:14px">Drop a CSV / XLSX / JSON file here, or click to browse</div>
+        <div style="margin-top:4px;font-size:12px;color:var(--dim)">Demographics, responses, brand preferences, attitudes, behavior…</div>
+        <input type="file" id="gt-file" accept=".csv,.tsv,.xlsx,.xlsm,.json" style="display:none">
+      </div>
+      <div id="gt-status" style="margin-top:16px"></div>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div class="view" id="view-dashboard">
+    <div style="flex:1;overflow-y:auto;padding:22px 26px;max-width:1200px;margin:0 auto;width:100%">
+      <h2 style="margin:0 0 16px">📈 Researcher Dashboard</h2>
+      <div id="dash-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px" id="dash-charts"></div>
+      <div id="dash-validation" style="margin-top:20px"></div>
+    </div>
+  </div>
+
+  <style>
+    .fld label{font-size:10px;letter-spacing:.03em;color:var(--dim);text-transform:uppercase;display:block;margin-bottom:4px;}
+    .fld input,.fld textarea{width:100%;background:var(--chrome);border:1px solid var(--line);color:var(--ink);
+      border-radius:8px;padding:9px 12px;font-size:13.5px;font-family:inherit;resize:none;}
+    .fld input:focus,.fld textarea:focus{outline:none;border-color:var(--accent);}
+    .ghost-btn{background:none;border:1px solid var(--line);color:var(--dim);border-radius:8px;padding:0 16px;height:38px;cursor:pointer;font-size:13px;}
+    .ghost-btn:hover{color:var(--ink);border-color:var(--dim);}
+    .libcard{background:var(--chrome);border:1px solid var(--line);border-radius:10px;padding:13px 15px;}
+    .libcard.locked{border-color:var(--custom);}
+    .libcard h4{margin:0 0 3px;font-size:14.5px;}
+    .libcard .meta{font-size:12px;color:var(--dim);line-height:1.5;}
+    .libcard .libtags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+    .libcard .libtags span{font-size:10px;background:#0e150a;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:#cdd8bf;}
+    .libcard .libactions{display:flex;gap:8px;margin-top:11px;}
+    .libcard .libactions button{flex:1;background:none;border:1px solid var(--line);color:var(--dim);border-radius:6px;padding:5px 0;font-size:11.5px;cursor:pointer;}
+    .libcard .libactions button:hover{color:var(--ink);}
+    .libcard .libactions button.lock.on{color:var(--custom);border-color:var(--custom);}
+    .dcard{background:var(--chrome);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+    .dcard .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--dim);}
+    .dcard .v{font:700 24px Consolas,monospace;color:var(--ink);margin-top:5px;}
+    .dcard .v small{font-size:13px;color:var(--dim);font-weight:400;}
+    .barbox{background:var(--chrome);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+    .barbox h4{margin:0 0 12px;font-size:13.5px;}
+    .barrow{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px;}
+    .barrow .lab{width:120px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .barrow .track{flex:1;height:16px;background:#0e150a;border-radius:4px;overflow:hidden;position:relative;display:flex;}
+    .barrow .fill{height:100%;}
+    .barrow .fill.syn{background:var(--syn);} .barrow .fill.real{background:var(--historical);}
+    .barrow .num{width:42px;text-align:right;font-family:Consolas,monospace;color:var(--ink);}
+    .simscore{display:inline-block;font:700 13px Consolas,monospace;padding:2px 8px;border-radius:6px;}
+    .confmeter{height:12px;border-radius:6px;background:#0e150a;overflow:hidden;margin-top:8px;}
+    .confmeter .fill{height:100%;}
+  </style>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+// ===================================================================
+// SHARED STATE
+// ===================================================================
+let backendData={}, bears={}, teamInteractions=[], runMeta={}, validation={}, dashboard={}, gtInfo={};
+let online=false, selected=null, activeTab="persona", libraryCache=[], pendingCustoms=[];
+
+// ===================================================================
+// VIEW TABS
+// ===================================================================
+document.querySelectorAll(".vtab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".vtab").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");
+  document.getElementById("view-"+t.dataset.view).classList.add("on");
+  if(t.dataset.view==="library") loadLibrary();
+  if(t.dataset.view==="dashboard") renderDashboard();
+  if(t.dataset.view==="ground") renderGroundTruth();
+  if(t.dataset.view==="run") requestAnimationFrame(()=>resize());
+}));
+
+const $=id=>document.getElementById(id);
+function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+
+// ===================================================================
+// CANVAS — DECORATED, ANIMATED SCREENING ROOM + SURVEY HALL
+// ===================================================================
+const canvas=$("stage"), ctx=canvas.getContext("2d");
+
+const FUR={
+  SCREENING:{fur:"#8a6a2f",accent:"#d3a44b"}, QUALIFIED:{fur:"#3f6f38",accent:"#78c46a"},
+  DISQUALIFIED:{fur:"#4a5568",accent:"#7f8da0"}, ANSWERING:{fur:"#2f6485",accent:"#5fb0d9"},
+  COMPLETED:{fur:"#5b4a86",accent:"#a98bd9"}, ERROR:{fur:"#8a3f3d",accent:"#e8746f"},
+  STANDBY:{fur:"#5a5140",accent:"#8a7d5f"},
+};
+const furFor=s=>FUR[s]||FUR.STANDBY;
+const INSIGHTS_ID="insights";
+let zones={};
+
+function computeZones(){
+  const W=canvas.width,H=canvas.height,pad=12,gap=12;
+  const topH=Math.round((H-pad*2-gap)*0.55), botH=(H-pad*2-gap)-topH;
+  const y1=pad,y2=pad+topH+gap;
+  zones.screening={x:pad,y:y1,w:W-pad*2,h:topH,label:"Bear Screening Room",color:"#e0b341",key:"screening"};
+  const insW=Math.min(220,Math.round(W*0.24));
+  zones.survey={x:pad,y:y2,w:W-pad*2-insW-gap,h:botH,label:"Survey Hall",color:"#5fb0d9",key:"survey"};
+  zones.insights={x:pad+(W-pad*2-insW),y:y2,w:insW,h:botH,label:"Insights",color:"#a98bd9",key:"insights"};
+}
+function resize(){
+  const wrap=canvas.parentElement; if(!wrap) return;
+  canvas.width=wrap.clientWidth; canvas.height=wrap.clientHeight;
+  ctx.imageSmoothingEnabled=false; computeZones();
+}
+window.addEventListener("resize",resize);
+
+function zoneForStatus(id,status){
+  if(id===INSIGHTS_ID) return "insights";
+  if(["ANSWERING","COMPLETED","ERROR"].includes(status)) return "survey";
+  return "screening";
+}
+function px(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
+const fmtN=v=>Math.max(0,Number(v)||0).toLocaleString();
+const fmtC=v=>{const n=Math.max(0,Number(v)||0);return n>=1e6?(n/1e6).toFixed(1)+"m":n>=1e3?(n/1e3).toFixed(n>=1e4?0:1)+"k":String(Math.round(n));};
+const fmtS=v=>(Math.max(0,Number(v)||0)).toFixed(1)+"s";
+
+// ---- decor: draw a market-research facility, not an empty box ----
+function drawScreeningDecor(z){
+  // floor + wall band
+  px(z.x,z.y,z.w,z.h,"#141d10");
+  px(z.x,z.y,z.w,42,"#1a2413");          // back wall
+  // wood floor lines
+  ctx.strokeStyle="rgba(120,90,50,.10)";ctx.lineWidth=1;
+  for(let fx=z.x+20;fx<z.x+z.w;fx+=46){ctx.beginPath();ctx.moveTo(fx,z.y+42);ctx.lineTo(fx,z.y+z.h);ctx.stroke();}
+
+  // ---- big banner ----
+  const bw=Math.min(300,z.w-140),bx=z.x+z.w/2-bw/2,by=z.y+6;
+  px(bx,by,bw,24,"#20180c"); px(bx,by,bw,24,"rgba(224,179,65,.16)");
+  ctx.strokeStyle="#e0b341";ctx.lineWidth=1;ctx.strokeRect(bx+.5,by+.5,bw-1,23);
+  px(bx-3,by-3,6,30,"#7a5a2f"); px(bx+bw-3,by-3,6,30,"#7a5a2f"); // banner poles
+  ctx.fillStyle="#f0d68a";ctx.font="bold 13px Segoe UI";ctx.textAlign="center";
+  ctx.fillText("🐻  BEAR SCREENING ROOM",bx+bw/2,by+17);ctx.textAlign="left";
+
+  // ---- entry door (left) & exit door (right, glowing green) ----
+  drawDoor(z.x+4,z.y+z.h-70,"ENTRY","#6d7c92",false);
+  drawDoor(z.x+z.w-30,z.y+z.h-70,"EXIT","#78c46a",true);
+
+  // ---- screening desks along the upper area ----
+  const deskY=z.y+58, deskN=Math.max(2,Math.min(4,Math.floor(z.w/220)));
+  screeningDesks=[];
+  for(let i=0;i<deskN;i++){
+    const dx=z.x+40+i*((z.w-90)/deskN);
+    drawDesk(dx,deskY);
+    screeningDesks.push({x:dx+28,y:deskY+30});
+  }
+
+  // ---- waiting area: chairs + table (bottom-left) ----
+  drawTable(z.x+70,z.y+z.h-46);
+  drawChair(z.x+48,z.y+z.h-40); drawChair(z.x+104,z.y+z.h-40);
+  drawPlant(z.x+18,z.y+50); drawPlant(z.x+z.w-30,z.y+z.h-34);
+
+  // ---- coffee station (right) ----
+  drawCoffee(z.x+z.w-96,z.y+50);
+
+  // ---- posters on the wall ----
+  drawPoster(z.x+30,z.y+8,"#5fb0d9","📋");
+  drawPoster(z.x+z.w/2-150,z.y+8,"#a98bd9","📈");
+  drawPoster(z.x+z.w-60,z.y+8,"#78c46a","🌱");
+
+  // zone frame + live count
+  ctx.strokeStyle="#25331b";ctx.lineWidth=1;ctx.strokeRect(z.x+.5,z.y+.5,z.w-1,z.h-1);
+  drawZoneCount(z);
+}
+let screeningDesks=[];
+
+function drawDoor(x,y,label,color,glow){
+  px(x,y,26,66,"#2a2013"); px(x+3,y+3,20,60,"#3a2e1a");
+  px(x+3,y+3,20,4,glow?color:"#241c10");
+  ctx.fillStyle=glow?color:"#8a7d5f";px(x+18,y+34,3,3,glow?color:"#8a7d5f");
+  if(glow){ctx.save();ctx.globalAlpha=.5;px(x+3,y+3,20,60,"rgba(120,196,106,.15)");ctx.restore();}
+  ctx.fillStyle=glow?color:"#6d7c92";ctx.font="8px Consolas";ctx.textAlign="center";
+  ctx.fillText(label,x+13,y-3);ctx.textAlign="left";
+}
+function drawDesk(x,y){
+  px(x,y+18,56,8,"#6b4f2f"); px(x,y+26,56,14,"#57411f");   // desk top + front
+  px(x+4,y+10,16,10,"#eef6e6");                             // monitor/clipboard
+  px(x+6,y+12,12,2,"#78c46a"); px(x+6,y+15,9,1,"#8fa079");
+  px(x+40,y+13,10,7,"#d6a83e");                             // clipboard stack
+  px(x+41,y+11,8,2,"#f0c75e");
+}
+function drawTable(x,y){ px(x,y,44,6,"#6b4f2f"); px(x+3,y+6,4,10,"#57411f"); px(x+37,y+6,4,10,"#57411f");
+  px(x+14,y-6,16,7,"#d6a83e"); px(x+16,y-4,12,1,"#8fa079"); }  // clipboard on table
+function drawChair(x,y){ px(x,y,12,4,"#4a5568"); px(x,y-10,12,4,"#4a5568"); px(x+1,y+4,2,8,"#3a4451"); px(x+9,y+4,2,8,"#3a4451"); }
+function drawPlant(x,y){ px(x+3,y+14,8,8,"#5a3d22"); ctx.fillStyle="#3f7d4a";
+  ctx.beginPath();ctx.arc(x+7,y+8,8,0,Math.PI*2);ctx.arc(x+2,y+11,5,0,Math.PI*2);ctx.arc(x+12,y+11,5,0,Math.PI*2);ctx.fill(); }
+function drawCoffee(x,y){ px(x,y,40,26,"#2a3340"); px(x+3,y+3,34,10,"#1a2028");
+  px(x+6,y+15,8,8,"#57411f"); px(x+7,y+13,6,3,"#d6a83e");     // pot
+  px(x+22,y+16,6,7,"#eef6e6"); px(x+30,y+16,6,7,"#eef6e6");   // cups
+  ctx.fillStyle="#8fa079";ctx.font="7px Consolas";ctx.textAlign="center";ctx.fillText("☕ COFFEE",x+20,y-3);ctx.textAlign="left"; }
+function drawPoster(x,y,color,emoji){ px(x,y,26,26,"#0e150a"); ctx.strokeStyle=color;ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,25,25);
+  ctx.font="13px serif";ctx.textAlign="center";ctx.fillText(emoji,x+13,y+18);ctx.textAlign="left"; }
+
+function drawPlainZone(z){
+  px(z.x,z.y,z.w,z.h,"#0f1709"); px(z.x,z.y,z.w,30,"#16210d");
+  ctx.strokeStyle="#25331b";ctx.lineWidth=1;ctx.strokeRect(z.x+.5,z.y+.5,z.w-1,z.h-1);
+  px(z.x,z.y,4,z.h,z.color);
+  ctx.fillStyle="#d7e2c8";ctx.font="12px Segoe UI";ctx.textAlign="left";
+  ctx.fillText("🐻  "+z.label,z.x+12,z.y+20);
+  if(z.key==="survey"){ // a few desks in the hall
+    for(let i=0;i<Math.max(2,Math.floor(z.w/180));i++) drawDesk(z.x+30+i*160,z.y+z.h-52);
+    drawPlant(z.x+z.w-26,z.y+34);
+  }
+  if(z.key==="insights"){ drawDesk(z.x+z.w/2-28,z.y+z.h-56); drawPoster(z.x+z.w-34,z.y+8,"#a98bd9","📊"); }
+  drawZoneCount(z);
+}
+function drawZoneCount(z){
+  let count=0;
+  if(z.key==="insights") count=backendData[INSIGHTS_ID]?1:0;
+  else Object.entries(backendData).forEach(([id,d])=>{if(!id.startsWith("_")&&id!==INSIGHTS_ID&&zoneForStatus(id,d.status)===z.key)count++;});
+  ctx.textAlign="right";ctx.fillStyle="#7d8e66";ctx.font="11px Consolas";
+  ctx.fillText(count+(z.key==="insights"?"":" bears"),z.x+z.w-12,z.y+20);ctx.textAlign="left";
+}
+
+// ---- bear sprite (small, crowd-friendly) with lively behaviors ----
+function drawBear(b){
+  const S=b.scale||1,t=b.t,status=b.status,fur=b.theme.fur,accent=b.theme.accent;
+  const answering=status==="ANSWERING";
+  const walking=b.moving;
+  const bob=(status==="DISQUALIFIED")?0:(walking?Math.abs(Math.sin(t*0.3+b.phase))*2:Math.sin(t*0.06+b.phase)*1.1);
+  const cx=Math.round(b.px),cy=Math.round(b.py-bob);
+
+  ctx.save();ctx.translate(cx,cy);ctx.scale(S,S);ctx.translate(-cx,-cy);
+  ctx.fillStyle="rgba(0,0,0,.32)";ctx.beginPath();ctx.ellipse(cx,b.py+2,12,4,0,0,Math.PI*2);ctx.fill();
+
+  const step=walking?Math.sin(t*0.3+b.phase)*1.8:0;
+  px(cx-7,cy-6,4,6,accent);px(cx+3,cy-6,4,6,accent);
+  px(cx-7,cy-6+step,4,3,fur);px(cx+3,cy-6-step,4,3,fur);
+  px(cx-8,cy-23,16,18,fur);px(cx-5,cy-18,10,9,accent);
+
+  // arms
+  if(["QUALIFIED","COMPLETED","DONE"].includes(status)){px(cx-11,cy-32,4,12,fur);px(cx+7,cy-32,4,12,fur);
+    if(status!=="QUALIFIED")px(cx+10,cy-33,3,5,accent);}
+  else if(status==="ERROR"){px(cx-12,cy-28,4,9,fur);px(cx+8,cy-28,4,9,fur);}
+  else if(b.chatting){const g=Math.sin(t*0.24)*2;px(cx-11-g,cy-27,4,10,fur);px(cx+7+g,cy-27,4,10,fur);}
+  else if(answering){px(cx-10,cy-22,4,10,fur);px(cx+7,cy-25,4,7,fur);}
+  else {px(cx-10,cy-21,4,11,fur);px(cx+7,cy-21,4,11,fur);}
+
+  px(cx-9,cy-37,18,15,fur);
+  px(cx-10,cy-41,6,6,fur);px(cx-8,cy-39,3,3,accent);
+  px(cx+4,cy-41,6,6,fur);px(cx+6,cy-39,3,3,accent);
+  // muzzle shifts with facing
+  const fd=b.facing>=0?1:-1;
+  px(cx-3,cy-30,6,5,"#ecdcc0");px(cx-1+fd,cy-28,2,2,"#2a1a10");
+  const blink=Math.floor(t*0.05+b.phase)%24===0,eh=blink?1:2;
+  if(status==="DISQUALIFIED"){px(cx-6,cy-34,3,1,"#101820");px(cx+3,cy-34,3,1,"#101820");}
+  else {px(cx-6+fd,cy-34,2,eh,"#101820");px(cx+4+fd,cy-34,2,eh,"#101820");}
+
+  // props
+  if(status==="SCREENING"&&b.looking){ // look-around: little glance arrows
+    ctx.fillStyle="#e0b341";ctx.font="7px Consolas";ctx.fillText(fd>0?"»":"«",cx+(fd>0?12:-16),cy-33);
+  }
+  if(status==="SCREENING"&&!b.chatting&&!b.looking&&!walking){ // idle magnifier
+    ctx.strokeStyle="#e0b341";ctx.lineWidth=1.3;ctx.beginPath();
+    ctx.arc(cx+14,cy-16,3,0,Math.PI*2);ctx.moveTo(cx+16,cy-14);ctx.lineTo(cx+19,cy-11);ctx.stroke();
+  }
+  if(b.chatting){ // speech dots between chatters
+    ctx.fillStyle="#eef6ff";ctx.beginPath();ctx.arc(cx+13*fd,cy-44,3.5,0,Math.PI*2);ctx.arc(cx+9*fd,cy-41,2,0,Math.PI*2);ctx.fill();
+    const d=Math.floor(t*0.14)%3;for(let i=0;i<3;i++)px(cx+8*fd+i*3*fd,cy-45,2,2,i===d?"#78c46a":"#61708a");
+  }
+  if(answering){ px(cx+8,cy-18,13,5,"#22303f");for(let i=0;i<3;i++){const on=(Math.floor(t*0.18)+i)%3===0;px(cx+10+i*4,cy-16.5,2,2,on?"#5fb0d9":"#6f8398");} }
+  if(status==="COMPLETED"||status==="DONE"){const cs=["#78c46a","#e0b341","#5fb0d9","#a98bd9"];for(let i=0;i<5;i++){const d=Math.sin(t*.08+i+b.phase)*3;px(cx-14+i*7+d,cy-46-(i%3)*4,2,3,cs[i%cs.length]);}}
+  if(status==="QUALIFIED"&&b.celebrate){const cs=["#78c46a","#e0b341"];for(let i=0;i<4;i++){px(cx-10+i*7,cy-46-(i%2)*4,2,3,cs[i%2]);}}
+  if(status==="ERROR"){ctx.fillStyle="#e8746f";ctx.font="bold 10px Consolas";ctx.fillText("!",cx+13,cy-40);}
+  if(status==="WAITING"){ctx.strokeStyle="#e0b341";ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(cx+14,cy-42,5,0,Math.PI*2);ctx.moveTo(cx+14,cy-42);ctx.lineTo(cx+14,cy-46);ctx.moveTo(cx+14,cy-42);ctx.lineTo(cx+17,cy-40);ctx.stroke();}
+  if(status==="DONE"&&b.id===INSIGHTS_ID){px(cx+8,cy-30,12,15,"#eef6e6");px(cx+10,cy-27,8,2,"#a98bd9");px(cx+10,cy-23,7,1,"#8fa079");}
+  // source dot (bottom-right of bear)
+  const srcColor={custom:"#e0b341",historical:"#5fb0d9",synthetic:"#78c46a",calibrated:"#78c46a"}[b.source]||null;
+  if(srcColor&&b.id!==INSIGHTS_ID){px(cx+7,cy-5,3,3,srcColor);}
+
+  if(selected===b.id){ctx.strokeStyle="#fff";ctx.lineWidth=1.5;ctx.strokeRect(cx-13,cy-44,26,50);}
+  ctx.restore();
+}
+
+// ---- assign target slots + drive lively movement ----
+function slotInZone(z,idx,count){
+  const cols=Math.max(1,Math.ceil(Math.sqrt(count*(z.w/Math.max(1,z.h)))));
+  const rows=Math.max(1,Math.ceil(count/cols));
+  const col=idx%cols,row=Math.floor(idx/cols);
+  const cellW=z.w/cols,cellH=(z.h-48)/rows;
+  return {x:z.x+cellW*(col+0.5),y:z.y+48+cellH*(row+0.6),
+    scale:Math.max(0.5,Math.min(1.05,30/Math.sqrt(count+2)))};
+}
+function positionBears(){
+  const groups={screening:[],survey:[],insights:[]};
+  Object.keys(backendData).forEach(id=>{if(id.startsWith("_"))return;const d=backendData[id];
+    if(id===INSIGHTS_ID){groups.insights.push(id);return;}groups[zoneForStatus(id,d.status)].push(id);});
+  Object.values(groups).forEach(a=>a.sort());
+  Object.entries(groups).forEach(([key,ids])=>{
+    const z=zones[key];if(!z)return;
+    ids.forEach((id,idx)=>{
+      const d=backendData[id];
+      const home=key==="insights"?{x:z.x+z.w/2,y:z.y+z.h*0.62,scale:1.05}:slotInZone(z,idx,ids.length);
+      if(!bears[id]){bears[id]={id,px:home.x,py:home.y,tx:home.x,ty:home.y,home,
+        t:Math.random()*100,phase:Math.random()*6.28,status:d.status,scale:home.scale,
+        theme:furFor(d.status),source:d.source,facing:1,moving:false,chatting:false,looking:false,
+        celebrate:false,nextAction:performance.now()+Math.random()*2000,exiting:false};}
+      const b=bears[id];b.home=home;b.scale=home.scale;b.source=d.source;
+      const prev=b.status;b.status=d.status;b.theme=furFor(d.status);
+      if(prev!==d.status){ // status change resets behavior
+        b.chatting=false;b.looking=false;b.exiting=false;
+        if(d.status==="QUALIFIED"){b.celebrate=true;setTimeout(()=>{if(bears[id])bears[id].celebrate=false;},2200);}
+        if(d.status==="DISQUALIFIED"){ // walk to the exit door then park there
+          const z2=zones.screening;b.exiting=true;b.tx=z2.x+z2.w-18;b.ty=z2.y+z2.h-40;
+        } else {b.tx=home.x;b.ty=home.y;}
+      }
+    });
+  });
+  Object.keys(bears).forEach(id=>{if(!backendData[id])delete bears[id];});
+}
+
+function wander(b,now){
+  // Only SCREENING bears roam the room; others hold their slot.
+  if(b.status!=="SCREENING"||b.exiting) return;
+  if(now<b.nextAction) return;
+  const roll=Math.random();
+  const z=zones.screening;
+  if(roll<0.34){ // walk to a screening desk or a random spot
+    const target=(screeningDesks.length&&Math.random()<0.5)?screeningDesks[Math.floor(Math.random()*screeningDesks.length)]
+      :{x:z.x+30+Math.random()*(z.w-60),y:z.y+52+Math.random()*(z.h-90)};
+    b.tx=target.x;b.ty=target.y;b.chatting=false;b.looking=false;
+    b.nextAction=now+2600+Math.random()*2200;
+  } else if(roll<0.6){ // stop and chat with a nearby screening bear
+    b.chatting=true;b.looking=false;b.tx=b.px;b.ty=b.py;
+    b.nextAction=now+1600+Math.random()*1400;
+  } else if(roll<0.8){ // look around
+    b.looking=true;b.chatting=false;b.tx=b.px;b.ty=b.py;b.facing=Math.random()<0.5?1:-1;
+    b.nextAction=now+1400+Math.random()*1200;
+  } else { // drift back toward home slot
+    b.tx=b.home.x;b.ty=b.home.y;b.chatting=false;b.looking=false;
+    b.nextAction=now+2000+Math.random()*1800;
+  }
+}
+
+function drawInteractionLinks(items){
+  items.forEach((it,i)=>{const s=bears[it.source],t=bears[it.target];if(!s||!t)return;
+    const x1=s.px,y1=s.py-40,x2=t.px,y2=t.py-40,mx=(x1+x2)/2,my=Math.min(y1,y2)-18-i*6;
+    ctx.save();ctx.strokeStyle=it.kind==="review"?"#e0b341":it.kind==="share"?"#a98bd9":"#78c46a";
+    ctx.lineWidth=1.6;ctx.setLineDash([6,5]);ctx.lineDashOffset=-(performance.now()/55);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(mx,my,x2,y2);ctx.stroke();ctx.setLineDash([]);ctx.restore();});
+}
+
+function loop(){
+  const now=performance.now();
+  const active=teamInteractions.filter(it=>bears[it.source]&&bears[it.target]);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  px(0,0,canvas.width,canvas.height,"#0b1108");
+  if(zones.screening) drawScreeningDecor(zones.screening);
+  if(zones.survey) drawPlainZone(zones.survey);
+  if(zones.insights) drawPlainZone(zones.insights);
+
+  Object.values(bears).forEach(b=>{
+    b.t+=1; wander(b,now);
+    const dx=b.tx-b.px,dy=b.ty-b.py,dist=Math.hypot(dx,dy);
+    b.moving=dist>1.2 && !b.chatting;
+    if(b.moving){const sp=b.exiting?1.6:0.9;b.px+=dx/dist*sp;b.py+=dy/dist*sp;b.facing=dx>=0?1:-1;}
+  });
+  drawInteractionLinks(active);
+  const order=Object.values(bears).sort((a,c)=>{const r=s=>s==="DISQUALIFIED"?0:(s==="COMPLETED"?2:1);return r(a.status)-r(c.status);});
+  order.forEach(b=>{if(b.id!==INSIGHTS_ID)drawBear(b);});
+  if(bears[INSIGHTS_ID])drawBear(bears[INSIGHTS_ID]);
+  requestAnimationFrame(loop);
+}
+
+canvas.addEventListener("click",e=>{
+  const r=canvas.getBoundingClientRect();const mx=e.clientX-r.left,my=e.clientY-r.top;
+  let best=null,bd=22;Object.values(bears).forEach(b=>{const d=Math.hypot(mx-b.px,my-(b.py-20));if(d<bd){bd=d;best=b.id;}});
+  if(best){selected=best;openPanel(best);}
+});
+
+// ===================================================================
+// DETAIL PANEL (persona + answer)
+// ===================================================================
+const SRC_LABEL={synthetic:"AI-generated",calibrated:"Calibrated",custom:"Custom",historical:"Historical",insights:"Analyst"};
+function openPanel(id){
+  const d=backendData[id]; if(!d) return;
+  $("panel").classList.remove("hidden");
+  $("pname").textContent=d.name;
+  $("prole").textContent=d.role||"";
+  const pill=$("ppill");pill.textContent=d.status;pill.className="pill "+d.status;
+  const src=$("psrc");
+  if(d.source&&d.source!=="insights"){src.style.display="";src.textContent=SRC_LABEL[d.source]||d.source;src.className="pill src-"+d.source;}
+  else src.style.display="none";
+
+  const sc=$("pscreen");
+  if(d.qualification_reason){sc.style.display="";
+    const ok=d.screening_result==="QUALIFIED";
+    sc.className="screening-note "+(ok?"ok":"no");
+    sc.innerHTML=`<b>${ok?"✓ Qualified":"✕ Screened out"}</b> — ${esc(d.qualification_reason)}`;
+  } else sc.style.display="none";
+
+  const m=d.metrics||{};
+  $("pmetrics").innerHTML=d.persona||d.is_insights?
+    `<div class="metric">Prompt<strong>${fmtC(m.prompt_tokens)}</strong></div>
+     <div class="metric">Output<strong>${fmtC(m.completion_tokens)}</strong></div>
+     <div class="metric">Time<strong>${fmtS(m.elapsed_seconds)}</strong></div>`:"";
+
+  const hasAns=!!(d.result&&d.result.trim());
+  $("tab-answer").classList.toggle("hidden",!hasAns&&!d.is_insights);
+  $("tab-answer").textContent=d.is_insights?"Insights report":"Survey answer";
+  $("tab-persona").classList.toggle("hidden",d.is_insights);
+  if(d.is_insights)activeTab="answer";
+  if(activeTab==="answer"&&!hasAns&&!d.is_insights)activeTab="persona";
+  renderPanelBody(d);
+  document.querySelectorAll("#ptabs .tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===activeTab));
+}
+function renderPanelBody(d){
+  const body=$("pbody");
+  if(activeTab==="persona"&&d.persona){body.innerHTML=renderPersona(d.persona);return;}
+  if(d.result&&d.result.trim()){body.innerHTML=renderMarkdown(d.result);return;}
+  const waiting={SCREENING:"🔍 Being screened…",QUALIFIED:"✓ Qualified — waiting for the Survey Hall…",
+    ANSWERING:"✍️ Answering the survey…",WAITING:"⏳ Waiting for the panel to finish…",
+    ACTIVE:"📊 Aggregating responses…",DISQUALIFIED:"This bear was screened out and won't answer."}[d.status]||"Standing by…";
+  body.innerHTML=`<p style="color:var(--dim)">${waiting}</p>`;
+}
+function renderPersona(p){
+  const row=(k,v)=>v?`<dt>${k}</dt><dd>${esc(v)}</dd>`:"";
+  const chips=a=>(a&&a.length)?`<div class="chips">${a.map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>`:"—";
+  return `<dl class="persona-grid">
+    ${row("Age",p.age)}${row("Gender",p.gender)}${row("Location",p.location)}
+    ${row("Occupation",p.occupation)}${row("Education",p.education)}${row("Income",p.income)}
+    ${row("Family",p.family_status)}${row("Shopping",p.shopping_frequency)}
+    ${row("Sustainability",p.sustainability)}${row("Tech adoption",p.tech_adoption)}${row("Risk",p.risk_tolerance)}
+  </dl>
+  <div style="margin-top:6px"><div style="font-size:10px;text-transform:uppercase;color:var(--dim);letter-spacing:.03em">Interests</div>${chips(p.interests)}</div>
+  <div style="margin-top:8px"><div style="font-size:10px;text-transform:uppercase;color:var(--dim);letter-spacing:.03em">Preferred brands</div>${chips(p.preferred_brands)}</div>
+  ${p.description?`<div class="persona-desc">${esc(p.description)}</div>`:""}`;
+}
+$("close").addEventListener("click",()=>{$("panel").classList.add("hidden");selected=null;});
+document.querySelectorAll("#ptabs .tab").forEach(t=>t.addEventListener("click",()=>{
+  if(t.classList.contains("hidden"))return;activeTab=t.dataset.tab;
+  document.querySelectorAll("#ptabs .tab").forEach(x=>x.classList.remove("on"));t.classList.add("on");
+  if(selected)renderPanelBody(backendData[selected]);
+}));
+
+// tiny markdown renderer
+function renderMarkdown(md){
+  const lines=String(md).split("\n");let html="",inList=false,inCode=false,code="";
+  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*(?!\*)(.+?)\*/g,"$1<em>$2</em>").replace(/`(.+?)`/g,"<code>$1</code>");
+  const closeL=()=>{if(inList){html+="</ul>";inList=false;}};
+  for(let raw of lines){
+    if(raw.trim().startsWith("```")){if(inCode){html+="<pre>"+esc(code)+"</pre>";code="";inCode=false;}else{closeL();inCode=true;}continue;}
+    if(inCode){code+=raw+"\n";continue;}
+    const line=raw.trim();
+    if(!line){closeL();continue;}
+    let m;
+    if(m=line.match(/^(#{1,6})\s+(.*)/)){closeL();const l=m[1].length;html+=`<h${l}>${inline(m[2])}</h${l}>`;}
+    else if(line.match(/^[-*+]\s+/)){if(!inList){html+="<ul>";inList=true;}html+=`<li>${inline(line.replace(/^[-*+]\s+/,""))}</li>`;}
+    else if(line.match(/^\d+\.\s+/)){if(!inList){html+="<ul>";inList=true;}html+=`<li>${inline(line.replace(/^\d+\.\s+/,""))}</li>`;}
+    else if(line.startsWith(">")){closeL();html+=`<blockquote>${inline(line.replace(/^>\s?/,""))}</blockquote>`;}
+    else{closeL();html+=`<p>${inline(line)}</p>`;}
+  }
+  if(inList)html+="</ul>";if(inCode)html+="<pre>"+esc(code)+"</pre>";
+  return html;
+}
+
+// ===================================================================
+// PHASE BAR + POLLING
+// ===================================================================
+const PHASE_ORDER=["generating","screening","surveying","aggregating","complete"];
+function updatePhaseBar(){
+  const cur=runMeta.phase||"idle";const ci=PHASE_ORDER.indexOf(cur);
+  document.querySelectorAll(".phase").forEach(el=>{
+    const pi=PHASE_ORDER.indexOf(el.dataset.phase);el.classList.remove("on","done");
+    if(cur==="complete"){el.classList.add("done");}
+    else if(ci>=0&&pi>=0){if(pi<ci)el.classList.add("done");else if(pi===ci)el.classList.add("on");}
+  });
+}
+async function poll(){
+  try{
+    const res=await fetch(API+"/status");const data=await res.json();
+    backendData=data;
+    teamInteractions=data._interactions||[];
+    runMeta=data._run||{};
+    validation=data._validation||{};
+    dashboard=data._dashboard||{};
+    gtInfo=data._ground_truth||{};
+    const p=data._performance||{};
+    $("performance").textContent=`${fmtN(p.total_tokens)} tokens • ${fmtS(p.elapsed_seconds)}${p.successful_requests?" • "+p.successful_requests+" calls":""}`;
+    setOnline(true);
+    positionBears();updatePhaseBar();updateGtFlag();
+    if(selected&&backendData[selected])openPanel(selected);
+    if(document.querySelector('.vtab.on')?.dataset.view==="dashboard")renderDashboard();
+    $("go").disabled=!!runMeta.active;
+    $("go").textContent=runMeta.active?"Running…":"Run panel";
+  }catch(e){setOnline(false);}
+}
+function setOnline(v){online=v;const c=$("conn");c.classList.toggle("on",v);$("conntext").textContent=v?"Online":"Offline";}
+function updateGtFlag(){
+  const on=gtInfo.loaded;const f=$("gt-flag");
+  f.classList.toggle("on",on);
+  f.textContent=on?`📊 ${gtInfo.filename||"dataset"} (${fmtN(gtInfo.n)} rows)`:"No ground truth";
+  $("gt-badge").textContent=on?fmtN(gtInfo.n):"none";
+}
+
+// ===================================================================
+// RUN BUTTON + MIX SLIDERS
+// ===================================================================
+["synthetic","custom","historical"].forEach(k=>{
+  $("mix-"+k).addEventListener("input",()=>{$("mixval-"+k).textContent=$("mix-"+k).value+"%";});
+});
+$("go").addEventListener("click",async()=>{
+  const survey=$("survey").value.trim();
+  if(!survey){alert("Please enter a survey.");return;}
+  const mix={synthetic:+$("mix-synthetic").value,custom:+$("mix-custom").value,historical:+$("mix-historical").value};
+  const body={survey,panel_size:Math.max(1,Math.min(500,+$("panel_size").value||25)),
+    audience:$("audience").value.trim(),source_mix:mix,calibrated:$("calibrated").checked,
+    custom_characters:pendingCustoms.length?pendingCustoms.slice():undefined};
+  $("go").disabled=true;$("go").textContent="Starting…";selected=null;$("panel").classList.add("hidden");
+  try{
+    const res=await fetch(API+"/assign",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json();alert("Error: "+(e.detail||res.status));$("go").disabled=false;$("go").textContent="Run panel";return;}
+    bears={};pendingCustoms=[];
+  }catch(e){alert("Could not reach backend. Is local_swarm.py running on :8000?");$("go").disabled=false;$("go").textContent="Run panel";}
+});
+
+// ===================================================================
+// CHARACTER STUDIO
+// ===================================================================
+const CS_FIELDS=["name","age","gender","location","occupation","education","income","family_status","shopping_frequency","risk_tolerance","sustainability","tech_adoption","interests","preferred_brands","description"];
+function csPayload(){
+  const p={};CS_FIELDS.forEach(f=>{const el=$("cs-"+f);if(el&&el.value.trim())p[f==="name"?"person_name":f]=el.value.trim();});
+  return p;
+}
+$("cs-save").addEventListener("click",async()=>{
+  const persona=csPayload();
+  if(!persona.person_name){$("cs-msg").style.color="var(--error)";$("cs-msg").textContent="Give your character a name.";return;}
+  const tags=($("cs-tags").value||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const body={persona,tags,is_template:$("cs-template").checked,locked:$("cs-locked").checked};
+  try{
+    const res=await fetch(API+"/personas",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const j=await res.json();
+    $("cs-msg").style.color="var(--qualified)";
+    $("cs-msg").textContent=`✓ Saved "${j.name}"${j.locked?" (locked into every study)":""}.`;
+    setTimeout(()=>$("cs-msg").textContent="",4000);
+  }catch(e){$("cs-msg").style.color="var(--error)";$("cs-msg").textContent="Could not save (backend offline?).";}
+});
+$("cs-clear").addEventListener("click",()=>{CS_FIELDS.concat(["tags"]).forEach(f=>{const el=$("cs-"+f);if(el)el.value="";});
+  $("cs-template").checked=false;$("cs-locked").checked=false;$("cs-msg").textContent="";});
+
+// ===================================================================
+// PERSONA LIBRARY
+// ===================================================================
+async function loadLibrary(){
+  try{
+    const q=$("lib-search").value.trim(),tag=$("lib-tag").value.trim();
+    const params=new URLSearchParams();if(q)params.set("q",q);if(tag)params.set("tag",tag);
+    const res=await fetch(API+"/personas?"+params);libraryCache=await res.json();
+    renderLibrary();
+  }catch(e){$("lib-grid").innerHTML="";$("lib-empty").style.display="";$("lib-empty").textContent="Backend offline.";}
+}
+function renderLibrary(){
+  const grid=$("lib-grid");
+  $("lib-badge").textContent=libraryCache.length;
+  if(!libraryCache.length){grid.innerHTML="";$("lib-empty").style.display="";return;}
+  $("lib-empty").style.display="none";
+  grid.innerHTML=libraryCache.map(rec=>{
+    const p=rec.persona||{};
+    const tags=(rec.tags||[]).map(t=>`<span>${esc(t)}</span>`).join("");
+    return `<div class="libcard ${rec.locked?"locked":""}">
+      <h4>${esc(rec.name)} ${rec.locked?"🔒":""}${rec.is_template?" 📋":""}</h4>
+      <div class="meta">${esc(p.age||"?")} · ${esc(p.gender||"—")} · ${esc(p.occupation||"—")}<br>${esc(p.location||"")}</div>
+      <div class="libtags">${tags}</div>
+      <div class="libactions">
+        <button class="lock ${rec.locked?"on":""}" data-act="lock" data-id="${rec.id}">${rec.locked?"Unlock":"Lock"}</button>
+        <button data-act="use" data-id="${rec.id}">Use in run</button>
+        <button data-act="del" data-id="${rec.id}">Delete</button>
+      </div></div>`;
+  }).join("");
+  grid.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>libAction(btn.dataset.act,btn.dataset.id)));
+}
+async function libAction(act,id){
+  const rec=libraryCache.find(r=>r.id===id);
+  if(act==="lock"){await fetch(`${API}/personas/${id}/lock`,{method:"POST"});loadLibrary();}
+  else if(act==="del"){if(confirm(`Delete "${rec?.name}"?`)){await fetch(`${API}/personas/${id}`,{method:"DELETE"});loadLibrary();}}
+  else if(act==="use"){ // prefill studio->run: push as a one-off custom character via a run with this persona locked-in isn't ideal;
+    // simplest: bump custom slider and stash the persona to include on next run
+    pendingCustoms=[rec.persona];
+    document.querySelector('.vtab[data-view="run"]').click();
+    $("mix-custom").value=Math.max(20,+$("mix-custom").value);$("mixval-custom").textContent=$("mix-custom").value+"%";
+    alert(`"${rec.name}" will be added to your next run. Adjust the mix and click Run panel.`);
+  }
+}
+$("lib-search").addEventListener("input",()=>loadLibrary());
+$("lib-tag").addEventListener("input",()=>loadLibrary());
+
+// ===================================================================
+// GROUND TRUTH VIEW
+// ===================================================================
+const gtDrop=$("gt-drop"),gtFile=$("gt-file");
+gtDrop.addEventListener("click",()=>gtFile.click());
+gtDrop.addEventListener("dragover",e=>{e.preventDefault();gtDrop.style.borderColor="var(--accent)";});
+gtDrop.addEventListener("dragleave",()=>{gtDrop.style.borderColor="var(--line)";});
+gtDrop.addEventListener("drop",e=>{e.preventDefault();gtDrop.style.borderColor="var(--line)";
+  if(e.dataTransfer.files.length)uploadGt(e.dataTransfer.files[0]);});
+gtFile.addEventListener("change",()=>{if(gtFile.files.length)uploadGt(gtFile.files[0]);});
+
+async function uploadGt(file){
+  $("gt-status").innerHTML=`<p style="color:var(--dim)">Uploading & modelling <b>${esc(file.name)}</b>…</p>`;
+  const fd=new FormData();fd.append("file",file);
+  try{
+    const res=await fetch(API+"/ground_truth",{method:"POST",body:fd});
+    const j=await res.json();
+    if(!res.ok){$("gt-status").innerHTML=`<p style="color:var(--error)">${esc(j.detail||"Upload failed.")}</p>`;return;}
+    await renderGroundTruth();
+  }catch(e){$("gt-status").innerHTML=`<p style="color:var(--error)">Could not reach backend.</p>`;}
+}
+async function renderGroundTruth(){
+  let info;
+  try{info=await(await fetch(API+"/ground_truth")).json();}catch(e){$("gt-status").innerHTML=`<p style="color:var(--error)">Backend offline.</p>`;return;}
+  if(!info.loaded){$("gt-status").innerHTML=`<p style="color:var(--dim)">No ground-truth dataset loaded yet.</p>`;return;}
+  const mapRows=Object.entries(info.mapping||{}).map(([role,col])=>
+    `<tr><td style="color:var(--dim);padding:3px 14px 3px 0">${esc(role)}</td><td>${esc(col)}</td></tr>`).join("");
+  const distBlocks=Object.entries(info.distributions||{}).map(([role,d])=>{
+    if(d.type==="numeric") return `<div class="barbox"><h4>${esc(role)} <span style="color:var(--dim);font-weight:400;font-size:11px">numeric</span></h4>
+      <div style="font:12px Consolas,monospace;color:var(--dim)">min ${d.min} · mean ${d.mean} · max ${d.max}</div></div>`;
+    const rows=Object.entries(d.probs||{}).slice(0,6).map(([k,v])=>bar(k,v,"real")).join("");
+    return `<div class="barbox"><h4>${esc(role)}</h4>${rows}</div>`;
+  }).join("");
+  const respBlocks=Object.entries(info.response_patterns||{}).map(([col,dist])=>{
+    const rows=Object.entries(dist).slice(0,6).map(([k,v])=>bar(k,v,"real")).join("");
+    return `<div class="barbox"><h4>${esc(col)} <span style="color:var(--dim);font-weight:400;font-size:11px">response</span></h4>${rows}</div>`;
+  }).join("");
+  $("gt-status").innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px">
+      <div style="font-size:15px">✅ <b>${esc(info.filename)}</b> — ${fmtN(info.n)} respondents modelled</div>
+      <button class="ghost-btn" id="gt-clear" style="height:32px">Clear dataset</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:16px;align-items:start">
+      <div class="barbox"><h4>Detected column mapping</h4><table style="font-size:13px">${mapRows||"<tr><td>(none)</td></tr>"}</table>
+        <p style="color:var(--dim);font-size:11.5px;margin:10px 0 0">Unmapped columns are treated as survey responses for calibration & validation.</p></div>
+      <div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">${distBlocks}${respBlocks}</div></div>
+    </div>`;
+  $("gt-clear")?.addEventListener("click",async()=>{await fetch(API+"/ground_truth",{method:"DELETE"});renderGroundTruth();});
+}
+function bar(label,frac,cls){
+  const pct=Math.round(frac*100);
+  return `<div class="barrow"><span class="lab" title="${esc(label)}">${esc(label)}</span>
+    <span class="track"><span class="fill ${cls}" style="width:${pct}%"></span></span>
+    <span class="num">${pct}%</span></div>`;
+}
+
+// ===================================================================
+// DASHBOARD VIEW
+// ===================================================================
+function renderDashboard(){
+  const d=dashboard||{};
+  const cards=[
+    ["Total bears",fmtN(d.total_bears)],["Qualified",fmtN(d.qualified_bears)],
+    ["Disqualified",fmtN(d.disqualified_bears)],["Avg age",d.average_age||"—"],
+    ["Total tokens",fmtN((d.token_usage||{}).total_tokens)],
+    ["Est. cost","$"+((d.estimated_cost_usd||0).toFixed(4))],
+    ["Runtime",fmtS(d.runtime_seconds)],
+    ["GT similarity",d.ground_truth_similarity!=null?Math.round(d.ground_truth_similarity*100)+"%":"—"],
+  ];
+  $("dash-cards").innerHTML=cards.map(([k,v])=>`<div class="dcard"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+
+  const compBox=(title,obj)=>{
+    const ent=Object.entries(obj||{});if(!ent.length)return "";
+    const tot=ent.reduce((s,[,v])=>s+v,0)||1;
+    const rows=ent.map(([k,v])=>bar(k,v/tot,"syn")).join("");
+    return `<div class="barbox"><h4>${title}</h4>${rows}</div>`;
+  };
+  $("dash-charts").innerHTML=compBox("Gender composition",d.gender_composition)+compBox("Province composition",d.province_composition)
+    +compBox("Source composition",d.source_composition);
+
+  renderValidationBlock();
+}
+function renderValidationBlock(){
+  const v=validation||{};const box=$("dash-validation");
+  if(!v.available){box.innerHTML=`<div class="barbox"><h4>Validation vs ground truth</h4>
+    <p style="color:var(--dim);font-size:13px;margin:0">${esc(v.reason||"Upload ground-truth data and run a panel to validate.")}</p></div>`;return;}
+  const conf=(runMeta.confidence)||{};
+  const comps=(v.comparisons||[]).map(c=>{
+    const keys=Array.from(new Set([...Object.keys(c.synthetic||{}),...Object.keys(c.real||{})])).slice(0,8);
+    const rows=keys.map(k=>{
+      const sp=Math.round((c.synthetic[k]||0)*100),rp=Math.round((c.real[k]||0)*100);
+      return `<div style="margin:7px 0">
+        <div style="font-size:11.5px;color:var(--dim);margin-bottom:2px">${esc(k)}</div>
+        <div class="barrow"><span class="lab" style="width:64px;color:var(--syn)">Synthetic</span><span class="track"><span class="fill syn" style="width:${sp}%"></span></span><span class="num">${sp}%</span></div>
+        <div class="barrow"><span class="lab" style="width:64px;color:var(--historical)">Real</span><span class="track"><span class="fill real" style="width:${rp}%"></span></span><span class="num">${rp}%</span></div>
+      </div>`;}).join("");
+    const sim=Math.round((c.similarity||0)*100);
+    const col=sim>=80?"var(--qualified)":sim>=60?"var(--screen)":"var(--error)";
+    return `<div class="barbox"><h4>${esc(c.dimension)} <span class="simscore" style="color:${col};border:1px solid ${col};margin-left:6px">${sim}% match</span></h4>${rows}</div>`;
+  }).join("");
+  const cs=conf.score||0;const ccol=cs>=70?"var(--qualified)":cs>=45?"var(--screen)":"var(--error)";
+  const cc=conf.components||{};
+  const confCard=`<div class="barbox" style="margin-bottom:14px">
+    <h4>Insight confidence
+      <span class="simscore" style="color:${ccol};border:1px solid ${ccol};margin-left:6px">${cs}/100 · ${esc(conf.label||"—")}</span></h4>
+    <div class="confmeter"><span class="fill" style="width:${cs}%;background:${ccol}"></span></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px">
+      ${[["Ground-truth sample","ground_truth_sample_size"],["Panel size","panel_size"],["Response similarity","response_similarity"],["Demographic coverage","demographic_coverage"]]
+        .map(([lab,key])=>`<div class="metric" style="text-transform:none">${lab}<strong>${Math.round((cc[key]||0)*100)}%</strong></div>`).join("")}
+    </div>
+    <p style="color:var(--dim);font-size:11.5px;margin:10px 0 0">Overall distribution similarity: <b style="color:var(--ink)">${Math.round((v.overall_similarity||0)*100)}%</b> across ${(v.comparisons||[]).length} dimensions · ground truth n=${fmtN(v.ground_truth_n)}</p>
+  </div>`;
+  box.innerHTML=`<h3 style="margin:8px 0 12px">🔬 Validation — synthetic panel vs real data</h3>${confCard}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">${comps}</div>`;
+}
+
+// ===================================================================
+// BOOTSTRAP
+// ===================================================================
+resize();
+loop();
+poll();
+setInterval(poll,1000);
+</script>
+</body>
+</html>

@@ -10,6 +10,10 @@ keeping the bears.
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![license](https://img.shields.io/badge/license-MIT-lightgrey)
 
+![Bear Panel — animated Screening Room and Survey Hall](docs/img/run.png)
+
+> The decorated, animated **Screening Room** (top) and **Survey Hall** (bottom): bears walk, chat, and look around while being screened; qualified bears cross to the hall and answer in parallel; dashed links carry their answers to the Survey Insights Bear.
+
 ## What it does
 
 A run flows through four phases — **Generating → Screening Room → Survey Hall →
@@ -25,6 +29,18 @@ Five workspaces (top tabs):
 - **📇 Persona Library** — search, tag, lock, reuse saved personas.
 - **📊 Ground Truth** — upload a real survey (CSV / XLSX / JSON); auto-detects columns and models distributions.
 - **📈 Dashboard** — totals, average age, composition, tokens, cost estimate, runtime, and validation vs ground truth with an insight confidence score.
+
+### Dashboard & validation
+
+![Researcher dashboard with validation vs ground truth](docs/img/dashboard.png)
+
+Every study is scored against the uploaded dataset: distribution bars per dimension, a per-dimension match percentage, and a 0–100 insight confidence score broken into its components.
+
+### Character Studio
+
+![Character Studio — hand-build a respondent](docs/img/studio.png)
+
+Build a respondent field by field, save it as a template, or lock it so it joins every future study.
 
 ## Repository layout
 
